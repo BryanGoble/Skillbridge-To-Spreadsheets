@@ -1,6 +1,9 @@
 # Skillbridge To Spreadsheets
  Powershell script to scrape the DoD Skillbridge website and export to a CSV file to be used in your preferred spreadsheet editor.
 
+## Latest Available Spreadsheet :hash:
+Google Sheets - [22 JUN 2023](https://docs.google.com/spreadsheets/d/1vUvQGKiBTDs6KNwdYSrNpPY_ouG8f7RHZ8w0IOcV0YI/edit?usp=sharing)
+#
 ## Why :question:
 As an aspiring Software Engineer on my way out of the Navy's door, I'm always looking for my next "project". After seeing this [post](https://www.reddit.com/r/SkillBridge/comments/1463nip/any_way_to_download_skillbridge_locations_table/) on the Skillbridge subreddit in regards to locating a spreadsheet of the available programs, I knew I could help filling this void.
 

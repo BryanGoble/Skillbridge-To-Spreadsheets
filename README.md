@@ -2,7 +2,7 @@
  Powershell script to scrape the DoD Skillbridge website and export to a CSV file to be used in your preferred spreadsheet editor.
 
 ## Latest Available Spreadsheet :hash:
-Google Sheets - [22 JUN 2023](https://docs.google.com/spreadsheets/d/1vUvQGKiBTDs6KNwdYSrNpPY_ouG8f7RHZ8w0IOcV0YI/edit?usp=sharing)
+Google Sheets - [22 JUN 2023](https://docs.google.com/spreadsheets/u/0/d/1vUvQGKiBTDs6KNwdYSrNpPY_ouG8f7RHZ8w0IOcV0YI/htmlview)
 <br>
 I will upload a new sheet about once per week to facilitate an easy review of the data and prevent too many people from wanting to scrape the site. Ultimately, this was a fun project and allows easier navigation/sorting of the available programs, so please don't abuse this.
 #

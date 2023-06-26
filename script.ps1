@@ -32,26 +32,39 @@ while ([OpenQA.Selenium.Support.UI.ExpectedConditions]::ElementToBeClickable([Op
     try {
 	
 	# Refresh the table element to avoid stale element reference error
-        $tableElement = Find-SeElement -Driver $driver -Id "location-table"
+    $tableElement = Find-SeElement -Driver $driver -Id "location-table"
 
-         # Execute JavaScript to retrieve the innerText of all table cells
+    # Execute JavaScript to retrieve the innerText of all table cells
 	$cellsScript = @"
-    		var rows = document.querySelectorAll('#location-table tbody tr');
-    		var tableData = [];
-    		for (var i = 0; i < rows.length; i++) {
-        		var rowData = [];
-        		var cells = rows[i].querySelectorAll('td');
-        		for (var j = 0; j < cells.length; j++) {
-            			rowData.push(cells[j].innerText);
-        		}
-                	tableData.push(rowData);
-            	}
-    		return tableData;
+        var rows = document.querySelectorAll('#location-table tbody tr');
+        var tableData = [];
+        for (var i = 0; i < rows.length; i++) {
+            var rowData = [];
+            var cells = rows[i].querySelectorAll('td');
+            for (var j = 0; j < cells.length; j++) {
+                var cellText = cells[j].innerText.trim();
+                var cellContent = "";
+                
+                // Check if the cell contains a <span> element with the letter 'N'
+                var spanElement = cells[j].querySelector('span');
+                if (spanElement && spanElement.innerText.trim().length === 1 && spanElement.innerText.trim() === 'N') {
+                    // If the <span> element contains only the letter 'N', exclude it from cellContent
+                    cellContent = cellText.replace(spanElement.innerText, "").trim();
+                } else {
+                    // Otherwise, use the cell text as the content
+                    cellContent = cellText;
+                }
+                
+                rowData.push(cellContent);
+            }
+            tableData.push(rowData);
+        }
+        return tableData;
 "@
 
-        $cellTexts = $driver.ExecuteScript($cellsScript)
+    $cellTexts = $driver.ExecuteScript($cellsScript)
 
-        # Add the cell texts to the tableData array
+    # Add the cell texts to the tableData array
 	$tableData += $cellTexts | ForEach-Object {
 		$rowData = $_ -split "`r?`n" | ForEach-Object {
 			$_ -replace ',', ' '
@@ -61,22 +74,22 @@ while ([OpenQA.Selenium.Support.UI.ExpectedConditions]::ElementToBeClickable([Op
 
 	# Refresh the next button element to avoid stale element reference error | Check if the nextButton contains the "disabled" class
 	$nextButton = Find-SeElement -Driver $driver -Id "location-table_next"
-        if ($nextButton.GetAttribute("class").Contains("disabled")) {
-            break  # Exit the loop
-        }
+    if ($nextButton.GetAttribute("class").Contains("disabled")) {
+        break  # Exit the loop
+    }
 
-        # Refresh the next button element to avoid stale element reference error | Click the "Next" button
+    # Refresh the next button element to avoid stale element reference error | Click the "Next" button
 	$nextButton = Find-SeElement -Driver $driver -Id "location-table_next"
 	$driver.ExecuteScript("arguments[0].click();", $nextButton)
 
         # Wait for the next page to load and the "Next" button to become enabled
         $wait.Until([OpenQA.Selenium.Support.UI.ExpectedConditions]::ElementToBeClickable([OpenQA.Selenium.By]::Id("location-table_next")))
 
-        # Generate a random delay between 5 and 20 seconds
-        $randomDelay = Get-Random -Minimum 5 -Maximum 20
-        Start-Sleep -Seconds $randomDelay
-    }
-    catch {
+    # Generate a random delay between 5 and 20 seconds
+    $randomDelay = Get-Random -Minimum 5 -Maximum 20
+    Start-Sleep -Seconds $randomDelay
+
+    } catch {
 	# Handle any exceptions that occur during the process
 	Write-Host "An error occurred: $($_.Exception.Message)"
 	break
